@@ -18,6 +18,18 @@ class Node {
   }
 }
 
+class LinkedList {
+  constructor(headNode, tailNode) {
+    this.head = headNode
+    this.tail = tailNode
+  }
+  addHead() {
+  }
+
+  removeHead() {
+  }
+}
+
 function createList(arr) {
   //creates linked list out of values of the array
   // loop through each
@@ -44,13 +56,44 @@ function createList(arr) {
   // create list with all nodes
   return headNode
 }
-function reverseList() {
 
+function reverseList(linkedListHead) {
+  let currentNode = linkedListHead
+  let prevNode = null
+  while (currentNode) {
+    console.log('=============================================================')
+    console.log('prevNode = ', prevNode)
+    console.log('currentNode = ', currentNode)
+    const nextNode = currentNode.next
+    console.log('nextNode = ', nextNode)
+    currentNode.next = prevNode
+    prevNode = currentNode
+    currentNode = nextNode
+    // [currentNode.next, prevNode, currentNode] = [prevNode, currentNode, currentNode.next]
+  /* 
+    given currentNode = linkedListHead
+    given prevNode = null
+    store nextNode (currentNode next prop)
+    set currentNode.next = prevNode
+    set currentNode = nextNode
+  */  
+  }
+  return prevNode
+  // make the .next of the nodeF point to the last node in the loop
 }
 
 // const nodeTest1 = new Node('apple')
 // console.log(nodeTest1)
 
+
+function checkLinkedList(head) {
+  let currentNode = head
+  let nextNode, tempNode 
+  while (currentNode) {
+    console.log("current node value: ", currentNode.value)
+    currentNode = currentNode.next
+  }
+}
 
 
 inputArray = ['a', 'b', 'c', 'd', 'e', 'f']
@@ -58,6 +101,13 @@ inputArray = ['a', 'b', 'c', 'd', 'e', 'f']
 
 const linkedList = createList(inputArray)
 console.log('complete list', linkedList)
+
+console.log("In order\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+checkLinkedList(linkedList)
+const reversedLinkList = reverseList(linkedList)
+console.log("\n Reversed Linked List:", reversedLinkList)
+console.log("Reverse order\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+checkLinkedList(reversedLinkList)
 
 // function LRUItem(key, value) {
 //   this.key = key
