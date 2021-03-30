@@ -47,8 +47,7 @@ const startingGen = [
     }
   }
 
-console.log("hey howdy hey!")
-const number1Fan = 'Dan'
+
 // extension NODE js repl for the live run code
 
 
