@@ -32,6 +32,7 @@ const expectedGen = [
 
 class GameOfLife {
   constructor(currentGen) {
+    this.previousGen = null
     this.currentGen = currentGen
     this.nextGen = []
     // this.nextGen = new Array(this.currentGen.length)
@@ -54,6 +55,7 @@ class GameOfLife {
       }
     }
     // return nextGen matrix (new)
+    this.previousGen = this.currentGen
     this.currentGen = this.nextGen
     this.nextGen = []
     return this.currentGen
@@ -111,6 +113,23 @@ const life = new GameOfLife(startingGen)
 // life.sumNeighbors(1,1)
 // console.log(life)
 // life.determineFate(1,0)
+life.determineNextGen()
+console.log(life)
+life.determineNextGen()
+console.log(life)
+life.determineNextGen()
+console.log(life)
+life.determineNextGen()
+console.log(life)
+life.determineNextGen()
+console.log(life)
+life.determineNextGen()
+console.log(life)
 
-// console.log(life.isWithinBounds(3,2))
 
+        // console.log('neighborRow is ', neighborRow)
+        // console.log('neighborCol is ', neighborCol)
+        // console.log('this.currentGen is ', this.currentGen)
+        // console.log('current row is ', this.currentGen[neighborRow])
+        // console.log('neighborValue is ', this.currentGen[neighborRow][neighborCol])
+        // // CODE FAILING HERE 
