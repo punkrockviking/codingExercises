@@ -33,14 +33,19 @@ const expectedGen = [
 class GameOfLife {
   constructor(currentGen) {
     this.currentGen = currentGen
+    this.nextGen = []
+    // this.nextGen = new Array(this.currentGen.length)
+    // for (let i = 0; i < this.nextGen.length; i++) {
+    //   this.nextGen[i] = new Array(this.currentGen[0].length)
+    // }
   }
 
   determineNextGen = () => {
-    let nextGen = []
     // for each space
     for (let row = 0; row < this.currentGen.length; row++) {
+      this.nextGen.push([])
       for (let col = 0; col < this.currentGen[row].length ; col++) {
-        // console.log(this.currentGen[row][col])
+        // console.log('isLiving', this.currentGen[row][col])
         // use sumNeighbors
         const numNeighbors = this.sumNeighbors(row,col)
         // use determineFate
@@ -49,7 +54,21 @@ class GameOfLife {
       }
     }
     // return nextGen matrix (new)
-    return nextGen
+    this.currentGen = this.nextGen
+    this.nextGen = []
+    return this.currentGen
+  }
+
+  isWithinBounds = (row, col) => {
+    // if row or col < 0 false
+    if (row < 0  || col < 0) {
+      return false
+    }
+    // if row or col > length false
+    if (row >= this.currentGen.length || col >= this.currentGen[row].length) {
+      return false
+    }
+    return true
   }
 
   determineFate = (isLiving, numNeighbors) => {
@@ -75,25 +94,16 @@ class GameOfLife {
     for (let neighborRow = row - 1; neighborRow <= row + 1; neighborRow++) {
       for (let neighborCol = col - 1; neighborCol <= col + 1; neighborCol++) {
         // identify neighbors
-        console.log('neighborRow is ', neighborRow)
-        console.log('neighborCol is ', neighborCol)
-        console.log('this.currentGen is ', this.currentGen)
-        console.log('current row is ', this.currentGen[neighborRow])
-        console.log('neighborValue is ', this.currentGen[neighborRow][neighborCol])
-        // CODE FAILING HERE 
-        const neighborValue = this.currentGen[neighborRow][neighborCol]
         // helper function to determine the bounds and isWithinBounds
-        const isWithinBounds = typeof(neighborValue) === 'number'
         const isCurrentSpace = neighborRow === row && neighborCol === col
         // only store if value is not undefined AND not the current space
-        if (isWithinBounds && !isCurrentSpace) {
+        if (this.isWithinBounds(neighborRow, neighborCol) && !isCurrentSpace) {
+          const neighborValue = this.currentGen[neighborRow][neighborCol]
           sum += neighborValue
         }
       }
     }
-   
-    
-     // break into prevRow, currRow, nextRow when identifying neighbors
+    return sum
   }
 }
 
@@ -101,4 +111,6 @@ const life = new GameOfLife(startingGen)
 // life.sumNeighbors(1,1)
 // console.log(life)
 // life.determineFate(1,0)
-life.determineNextGen()
+
+// console.log(life.isWithinBounds(3,2))
+
