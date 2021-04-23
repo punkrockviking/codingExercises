@@ -15,6 +15,9 @@ jumps can be -1,at, or +1 from the last jump
 
 /* 
 The frog can jump to the last stone by jumping 1 unit to the 2nd stone, then 2 units to the 3rd stone, then 2 units to the 4th stone, then 3 units to the 6th stone, 4 units to the 7th stone, and 5 units to the 8th stone. 
+
+
+
 */
 
 // 0 index is starting point. .length -1 is ending point
@@ -23,7 +26,7 @@ The frog can jump to the last stone by jumping 1 unit to the 2nd stone, then 2 u
 const stones = [0,1,3,5,6,8,12,17]
 true
 
-const failedStones = [0,1,2,3,4,8,9,11]
+const failedStones = [0,1,2,3,4,8,9,11] 
 false
 
 const bestStones = [0,1,3,5,8,12,17]
@@ -49,11 +52,15 @@ function canCrossBySkippingStones(stones) {
   const lastStone = stones[stones.length-1]
   const prevJump = 1
   const currentStone = stones[0]
+  const stonesSet = new Set(stones)
+  const visitedStones = new Set()
+  // converting array to set gives us instant lookup for values, most efficent way to run through array because you only do it one time
+  
     // do any of the jumps lead to a stone that is forward in the river?
   // does our jumpDistance +-1 lead to another stone?
   // constraints: jump cant be 0, must lead to forward stone,
 //   console.log(stones) 
-  function jumpStones(distance, stone, lastStone) {
+  function jumpStones(distance, stone) {
     const nextStone = distance + stone
     // console.log(nextStone)
     if (distance === 0) return false
@@ -61,35 +68,37 @@ function canCrossBySkippingStones(stones) {
         return true
     }
     // return false if nextStone is not in the stones list
-    if (!stones.includes(nextStone)){
+    if (!stonesSet.has(nextStone) || visitedStones.has(`${nextStone},${distance}`)){ 
+      // instant lookup within sets
         // console.log('missed stone', nextStone)
         return false
         // THIS IS WHERE IT FAILS, DOES NOT MOVE PAST HERE
     }
+    visitedStones.add(`${nextStone},${distance}`)
     // change the values of the current stone and jump distance and plug them in
 
     //   offsets = [-1, 0, 1]
-    //   return offsets.some(offset => jumpStones(distance + offset, nextStone, lastStone))
+    //   return offsets.some(offset => jumpStones(distance + offset, nextStone))
     
-    //   return jumpStones(distance - 1, nextStone, lastStone) || jumpStones(distance, nextStone, lastStone) || jumpStones(distance + 1, nextStone, lastStone) 
-    const sameJumpSucceeds = jumpStones(distance, nextStone, lastStone)
+    //   return jumpStones(distance - 1, nextStone) || jumpStones(distance, nextStone) || jumpStones(distance + 1, nextStone) 
+    const sameJumpSucceeds = jumpStones(distance, nextStone)
     if (sameJumpSucceeds) {
         // console.log('samesame')
         return true
     } 
-    const shortJumpSucceeds = jumpStones(distance - 1, nextStone, lastStone)
+    const shortJumpSucceeds = jumpStones(distance - 1, nextStone)
     if (shortJumpSucceeds) {
         // console.log('short jump return')
         return true
     }
-    const longJumpSucceeds = jumpStones(distance + 1, nextStone, lastStone)
+    const longJumpSucceeds = jumpStones(distance + 1, nextStone)
     if (longJumpSucceeds) {
         // console.log('long jump return')
         return true
     }
     return false
   }
-  return jumpStones(prevJump, currentStone, lastStone)
+  return jumpStones(prevJump, currentStone)
   
     // if so, what do i do with that info?
     // jump as far as possible
@@ -120,3 +129,4 @@ console.log(canCross(stones))
 console.log(canCross(bestStones))
 console.log(canCross(failedStones))
 // canCrossUsingEveryStone(stones)
+// time complexity of 3N instead of the original 3N^3
