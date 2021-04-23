@@ -42,47 +42,53 @@ function canCrossUsingEveryStone(stones) {
   return true
 }
 
-function jumpStones(distance, stone, lastStone) {
-  const nextStone = distance + stone
-  if (nextStone === lastStone) {
-    return true
-  }
-  // return false if nextStone is not in the stones list
-  if (!stones.includes(nextStone)){
-    console.log(nextStone)
-    return false
-    // THIS IS WHERE IT FAILS, DOES NOT MOVE PAST HERE
-  }
-  // change the values of the current stone and jump distance and plug them in
 
-//   jumpDifferential = [-1, 0, 1]
-//   return jumpDifferential.some(relativeDistance => jumpStones(distance + relativeDistance, nextStone, lastStone))
-  
-//   return jumpStones(distance - 1, nextStone, lastStone) || jumpStones(distance, nextStone, lastStone) || jumpStones(distance + 1, nextStone, lastStone)
-
-  const sameJumpSucceeds = jumpStones(distance, nextStone, lastStone)
-  if (sameJumpSucceeds) {
-    return true
-  } 
-  const shortJumpSucceeds = jumpStones(distance - 1, nextStone, lastStone)
-  if (shortJumpSucceeds) {
-    return true
-  }
-  const longJumpSucceeds = jumpStones(distance + 1, nextStone, lastStone)
-  if (longJumpSucceeds) {
-    return true
-  }
-  return false
-}
 
 function canCrossBySkippingStones(stones) {
     // 3 jump values
   const lastStone = stones[stones.length-1]
   const prevJump = 1
-  const currentStone = stones[1]
+  const currentStone = stones[0]
     // do any of the jumps lead to a stone that is forward in the river?
   // does our jumpDistance +-1 lead to another stone?
   // constraints: jump cant be 0, must lead to forward stone,
+//   console.log(stones) 
+  function jumpStones(distance, stone, lastStone) {
+    const nextStone = distance + stone
+    // console.log(nextStone)
+    if (distance === 0) return false
+    if (nextStone === lastStone) {
+        return true
+    }
+    // return false if nextStone is not in the stones list
+    if (!stones.includes(nextStone)){
+        // console.log('missed stone', nextStone)
+        return false
+        // THIS IS WHERE IT FAILS, DOES NOT MOVE PAST HERE
+    }
+    // change the values of the current stone and jump distance and plug them in
+
+    //   offsets = [-1, 0, 1]
+    //   return offsets.some(offset => jumpStones(distance + offset, nextStone, lastStone))
+    
+    //   return jumpStones(distance - 1, nextStone, lastStone) || jumpStones(distance, nextStone, lastStone) || jumpStones(distance + 1, nextStone, lastStone) 
+    const sameJumpSucceeds = jumpStones(distance, nextStone, lastStone)
+    if (sameJumpSucceeds) {
+        // console.log('samesame')
+        return true
+    } 
+    const shortJumpSucceeds = jumpStones(distance - 1, nextStone, lastStone)
+    if (shortJumpSucceeds) {
+        // console.log('short jump return')
+        return true
+    }
+    const longJumpSucceeds = jumpStones(distance + 1, nextStone, lastStone)
+    if (longJumpSucceeds) {
+        // console.log('long jump return')
+        return true
+    }
+    return false
+  }
   return jumpStones(prevJump, currentStone, lastStone)
   
     // if so, what do i do with that info?
@@ -106,10 +112,11 @@ function canCross(stones) {
 
 // how to deal with early return on first jump
 // how to cache the stone we already visited
+// need to tell if stone is included without using includes method(inefficient)
 
 
 
 console.log(canCross(stones))
-// console.log(canCross(bestStones))
-// console.log(canCross(failedStones))
+console.log(canCross(bestStones))
+console.log(canCross(failedStones))
 // canCrossUsingEveryStone(stones)
